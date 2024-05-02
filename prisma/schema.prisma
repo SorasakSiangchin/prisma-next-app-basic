@@ -1,0 +1,26 @@
+
+// client ที่จะมาต่อคือ client ตัวไหน
+generator client {
+  provider = "prisma-client-js"
+}
+
+//จะเป็น database ตัวไหนที่เราจะพูดคุย
+datasource db {
+  provider = "postgresql" // ประเภท database 
+  url      = env("DATABASE_URL") // สามารถอ่าน env ได้
+}
+
+model Post {
+  id Int @id @default(autoincrement())
+  title String
+  content String? // เพิ่ม field ตรงนี้มา โดยใส่ ? เป็น optional มา
+  categoryId Int
+  category Category @relation(fields : [categoryId] , references : [id])
+  createAt DateTime @default(now())
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+  name String @unique
+  posts Post[]
+}
